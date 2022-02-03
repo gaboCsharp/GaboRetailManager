@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRMDataManager", "GRMDataMa
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "GRMData", "GRMData\GRMData.sqlproj", "{CA743CDF-9715-448B-A704-86E6D5AE2EE4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRMDesktopUI", "GRMDesktopUI\GRMDesktopUI.csproj", "{84624318-DD62-40C8-B7ED-F72B6A2E8873}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{CA743CDF-9715-448B-A704-86E6D5AE2EE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA743CDF-9715-448B-A704-86E6D5AE2EE4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CA743CDF-9715-448B-A704-86E6D5AE2EE4}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{84624318-DD62-40C8-B7ED-F72B6A2E8873}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84624318-DD62-40C8-B7ED-F72B6A2E8873}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84624318-DD62-40C8-B7ED-F72B6A2E8873}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84624318-DD62-40C8-B7ED-F72B6A2E8873}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
