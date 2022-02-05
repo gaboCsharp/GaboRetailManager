@@ -25,7 +25,7 @@ namespace GRMDesktopUI.Helpers
             if(box != null)
             {
                 //this funny little dance here ensures that we've hooker the
-                // PasswordChaged event once, and only once.
+                //PasswordChaged event once, and only once.
                 box.PasswordChanged -= PasswordChanged;
                 box.PasswordChanged += PasswordChanged;
             }
