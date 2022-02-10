@@ -16,7 +16,7 @@ namespace GRMDataManager.Controllers
         {
             string userId = RequestContext.Principal.Identity.GetUserId();
 
-            return new string[] { "value1", "value2", userId };
+            return new string[] { "Sami", "Gabo", userId };
         }
 
 

@@ -1,15 +1,24 @@
 ﻿using Caliburn.Micro;
+using GRMDesktopUI.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GRMDesktopUI.ViewModels
 {
     public class LoginViewModel : Screen
     {
         private string _userName;
+        private string _password;
+        private IAPIHelper _apiHelper;
+
+        public LoginViewModel(IAPIHelper apiHelper)
+        {
+            _apiHelper = apiHelper; 
+        }
 
         public string UserName
         {
@@ -20,9 +29,7 @@ namespace GRMDesktopUI.ViewModels
                 NotifyOfPropertyChange(() => UserName);
                 NotifyOfPropertyChange(() => CanLogIn);
             }
-        }
-
-        private string _password;
+        }      
 
         public string Password
         {
@@ -62,9 +69,17 @@ namespace GRMDesktopUI.ViewModels
         //    return output;  
         //}
 
-        public void LogIn(string userName, string pasword)
+        public async Task LogIn()
         {
-            Console.WriteLine();
+            try
+            {
+                var result = await _apiHelper.Authenticate(UserName, Password);
+            }
+            catch (Exception ex)
+            {
+
+                Console.WriteLine(ex.Message);
+            }
         }
 
 
