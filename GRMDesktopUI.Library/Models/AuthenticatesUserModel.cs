@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GRMDesktopUI.Models
+namespace GRMDesktopUI.Library.Models
 {
     public class AuthenticatesUserModel
     {

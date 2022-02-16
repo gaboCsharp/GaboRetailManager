@@ -26,6 +26,7 @@ namespace GRMDataManager.App_Start
                         {
                             type = "string",
                             name = "grant_type",
+                            @default="password",
                             required = true,
                             @in = "formData"
                         },
