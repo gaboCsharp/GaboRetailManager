@@ -58,8 +58,6 @@ namespace GRMDesktopUI.Library.Api
 
         }
 
-
-
         public async Task GetLoggedInUserInfo(string token)
         {
             apiClient.DefaultRequestHeaders.Clear();
