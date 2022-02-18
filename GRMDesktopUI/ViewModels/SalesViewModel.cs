@@ -43,6 +43,20 @@ namespace GRMDesktopUI.ViewModels
             }
         }
 
+
+        private ProductModel _selectedProduct;
+
+        public ProductModel SelectedProduct
+        {
+            get { return _selectedProduct; }
+            set 
+            { 
+                _selectedProduct = value;
+                NotifyOfPropertyChange(() => SelectedProduct);
+            }
+        }
+
+
         private BindingList<ProductModel> _cart;
 
         public BindingList<ProductModel> Cart
