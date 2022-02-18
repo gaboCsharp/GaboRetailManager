@@ -1,5 +1,6 @@
 ﻿
 using GRMDesktopUI.Library.Models;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace GRMDesktopUI.Library.Api
@@ -9,5 +10,7 @@ namespace GRMDesktopUI.Library.Api
         Task<AuthenticatesUserModel> Authenticate(string username, string password);
 
         Task GetLoggedInUserInfo(string token);
+
+        HttpClient ApiClient { get; }
     }
 }

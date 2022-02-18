@@ -8,6 +8,9 @@ namespace GRMDataManager.Library.Models
 {
     public class UserModel
     {
+        /// <summary>
+        /// the unique user
+        /// </summary>
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
