@@ -7,7 +7,8 @@ begin
 	ProductName,
 	[Description],
 	RetailPrice,
-	QuantityInStock
+	QuantityInStock,
+	isTaxable
 	from Product
 	Order by ProductName;
 end
