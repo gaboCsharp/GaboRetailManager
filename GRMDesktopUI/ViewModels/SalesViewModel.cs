@@ -15,10 +15,13 @@ namespace GRMDesktopUI.ViewModels
     {
         IProductEndPoint _productEndpoint;
         IConfigHelper _configHelper;
-        public SalesViewModel(IProductEndPoint productEndpoint, IConfigHelper configHelper)
+        ISaleEndPoint _saleEndPoint;
+        public SalesViewModel(IProductEndPoint productEndpoint, IConfigHelper configHelper, ISaleEndPoint saleEndPoint)
         {
             _productEndpoint = productEndpoint;
+            _saleEndPoint = saleEndPoint;
             _configHelper = configHelper;
+
        
         }
 
@@ -130,6 +133,7 @@ namespace GRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
 
         }
 
@@ -138,6 +142,7 @@ namespace GRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => SubTotal);
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
         public bool CanCheckOut
@@ -147,6 +152,10 @@ namespace GRMDesktopUI.ViewModels
                 bool output = false;
                 //Make sure there is something in the cart
 
+                if(Cart.Count > 0)
+                {
+                    output = true;
+                }
 
 
                 return output;
@@ -154,9 +163,21 @@ namespace GRMDesktopUI.ViewModels
             }
         }
 
-        public void CheckOut()
+        public async Task CheckOut()
         {
-            
+            SaleModel sale = new SaleModel();
+
+            foreach (var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+
+                });                
+            }
+            await _saleEndPoint.PostSale(sale);
+
         }
 
 
