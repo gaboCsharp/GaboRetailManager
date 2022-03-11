@@ -1,8 +1,10 @@
-﻿using Caliburn.Micro;
+﻿using AutoMapper;
+using Caliburn.Micro;
 using GRMDesktopUI.Helpers;
 using GRMDesktopUI.Library.Api;
 using GRMDesktopUI.Library.Helpers;
 using GRMDesktopUI.Library.Models;
+using GRMDesktopUI.Models;
 using GRMDesktopUI.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -29,10 +31,29 @@ namespace GRMDesktopUI
 
         }
 
+
+        private IMapper ConfigureAutomapper()
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ProductModel, ProductDisplayModel>();
+                cfg.CreateMap<CartItemModel, CartItemDisplayModel>();
+            });
+
+            var output = config.CreateMapper();
+
+            return output;
+        }
+
         //Denpendency Injection
 
         protected override void Configure()
         {
+
+          
+
+            _container.Instance(ConfigureAutomapper());
+
             _container.Instance(_container)
                 .PerRequest<IProductEndPoint, ProductEndPoint>()
                 .PerRequest<ISaleEndPoint, SaleEndPoint>();
