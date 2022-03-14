@@ -67,6 +67,17 @@ namespace GRMDesktopUI.ViewModels
             }
         }
 
+        private async Task ResetSalesViewModel()
+        {
+            Cart = new BindingList<CartItemDisplayModel>();
+            // TODO - Add cleanring ther selectedCartItem if it does not do it itseft
+            await LoadProducts();
+
+            NotifyOfPropertyChange(() => SubTotal);
+            NotifyOfPropertyChange(() => Tax);
+            NotifyOfPropertyChange(() => Total);
+            NotifyOfPropertyChange(() => CanCheckOut);
+        }
 
         private CartItemDisplayModel _selectedCartItem;
 
@@ -156,7 +167,7 @@ namespace GRMDesktopUI.ViewModels
             {
                 bool output = false;
 
-                if (SelectedCartItem != null && SelectedCartItem?.Product.QuantityInStock > 0)
+                if (SelectedCartItem != null && SelectedCartItem?.QuantityInCart > 0)
                 {
                     output = true;
                 }
@@ -172,7 +183,7 @@ namespace GRMDesktopUI.ViewModels
 
             SelectedCartItem.Product.QuantityInStock += 1;
 
-            if (SelectedCartItem.QuantityInCart > 1 )
+            if (SelectedCartItem.QuantityInCart > 1)
             {
                 SelectedCartItem.QuantityInCart -= 1;
               
@@ -185,6 +196,7 @@ namespace GRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => Tax);
             NotifyOfPropertyChange(() => Total);
             NotifyOfPropertyChange(() => CanCheckOut);
+            NotifyOfPropertyChange(() => CanAddtoCart);
         }
 
         public bool CanCheckOut
@@ -219,6 +231,8 @@ namespace GRMDesktopUI.ViewModels
                 });                
             }
             await _saleEndPoint.PostSale(sale);
+
+            await ResetSalesViewModel();
 
         }
 

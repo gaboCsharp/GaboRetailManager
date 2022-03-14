@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using GRMDesktopUI.EventModels;
+using GRMDesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,22 +14,52 @@ namespace GRMDesktopUI.ViewModels
 
         private IEventAggregator _events;
         private SalesViewModel _salesVM;
+        private ILoggedInUserModel _user;
 
         public ShellViewModel(IEventAggregator events, SalesViewModel salesVM,
-            SimpleContainer contanier)
+             ILoggedInUserModel user)
         {
             _events = events;  
             _salesVM = salesVM;
-
+            _user = user;
 
             _events.Subscribe(this);
 
             ActivateItem(IoC.Get<LoginViewModel>());          
         }
 
+
+        public bool IsLoggedIn
+        {
+            get
+            {
+                bool output = false;
+
+                if (!string.IsNullOrWhiteSpace(_user.Token))
+                {
+                    output = true;
+                }
+
+                return output;
+            }
+        }
+      
+        public void ExitApplication()
+        {
+            TryClose();
+        }
+
+        public void LogOut()
+        {
+            _user.LogOffUser();
+            ActivateItem(IoC.Get<LoginViewModel>());
+            NotifyOfPropertyChange(() => IsLoggedIn);
+        }
+
         public void Handle(LogOnEvent message)
         {
             ActivateItem(_salesVM);
+            NotifyOfPropertyChange(() => IsLoggedIn);
             
         }
     }
