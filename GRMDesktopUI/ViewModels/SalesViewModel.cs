@@ -7,9 +7,11 @@ using GRMDesktopUI.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GRMDesktopUI.ViewModels
 {
@@ -19,19 +21,47 @@ namespace GRMDesktopUI.ViewModels
         IConfigHelper _configHelper;
         ISaleEndPoint _saleEndPoint;
         IMapper _mapper;
+        private readonly StatusInfoViewModel _status;
+        private readonly IWindowManager _window;
+
         public SalesViewModel(IProductEndPoint productEndpoint, IConfigHelper configHelper, 
-            ISaleEndPoint saleEndPoint, IMapper mapper)
+            ISaleEndPoint saleEndPoint, IMapper mapper, StatusInfoViewModel status, IWindowManager window)
         {
             _productEndpoint = productEndpoint;
             _saleEndPoint = saleEndPoint;
             _configHelper = configHelper;
-            _mapper = mapper;       
+            _mapper = mapper;
+            _status = status;
+            _window = window;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadProducts();
+            try
+            {
+                await LoadProducts();
+            }
+            catch (Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+                settings.WindowsStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.NoResize;
+                settings.Title = "System Error";
+
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("Unauthorized Access", "You do not have permission to interact sith the Sales Form.");
+                    _window.ShowDialog(_status, null, settings);
+                }
+                else
+                {
+                    _status.UpdateMessage("Fatal", ex.Message);
+                    _window.ShowDialog(_status, null, settings);
+                }
+              
+                TryClose();
+            }
         }
 
         private async Task LoadProducts()
