@@ -32,5 +32,47 @@ namespace GRMDesktopUI.Library.Api
                 }
             }
         }
+
+        public async Task<Dictionary<string,string>> GetAllRoles()
+        {
+            using (HttpResponseMessage responde = await _apiHelper.ApiClient.GetAsync("/api/User/Admin/GetAllRoles"))
+            {
+                if (responde.IsSuccessStatusCode)
+                {
+                    var result = await responde.Content.ReadAsAsync<Dictionary<string, string>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(responde.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task AddUserToRole(string userId, string roleName)
+        {
+            var data = new { userId, roleName };
+
+            using (HttpResponseMessage responde = await _apiHelper.ApiClient.PostAsJsonAsync("/api/User/Admin/AddRole", data))
+            {
+                if (!responde.IsSuccessStatusCode)               
+                {
+                    throw new Exception(responde.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task RemoveUserToRole(string userId, string roleName)
+        {
+            var data = new { userId, roleName };
+
+            using (HttpResponseMessage responde = await _apiHelper.ApiClient.PostAsJsonAsync("/api/User/Admin/RemoveRole", data))
+            {
+                if (!responde.IsSuccessStatusCode)
+                {
+                    throw new Exception(responde.ReasonPhrase);
+                }
+            }
+        }
     }
 }
