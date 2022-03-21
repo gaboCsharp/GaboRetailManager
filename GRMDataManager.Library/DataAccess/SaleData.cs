@@ -75,17 +75,17 @@ namespace GRMDataManager.Library.DataAccess
                     throw;
                 }
             }
-
-            
         }
 
-        //public List<ProductModel> GetProducts()
-        //{
-        //    SQLDataAccess sql = new SQLDataAccess();
+        public List<SaleReportModel> GetSaleReport()
+        {
+            SQLDataAccess sql = new SQLDataAccess();
 
-        //    var output = sql.LoadData<ProductModel, dynamic>("spProduct_GetAll", new { }, "GRMData");
+            var output = sql.LoadData<SaleReportModel, dynamic>("dbo.spSale_SaleReport", new { }, "GRMData");
 
-        //    return output;
-        //}
+            return output;
+        }
+
+
     }
 }
