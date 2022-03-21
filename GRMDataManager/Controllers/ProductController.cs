@@ -9,7 +9,7 @@ using System.Web.Http;
 
 namespace GRMDataManager.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Cashier")]
     public class ProductController : ApiController
     {
         // GET api/<controller>

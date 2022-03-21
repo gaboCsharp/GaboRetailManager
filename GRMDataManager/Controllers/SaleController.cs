@@ -9,10 +9,11 @@ using System.Web.Http;
 
 namespace GRMDataManager.Controllers
 {
-    [Authorize]
+    
     public class SaleController : ApiController
     {
-    
+
+        [Authorize(Roles = "Cashier")]
         public void Post(SaleModel sale)
         {
             SaleData data = new SaleData();
@@ -21,6 +22,8 @@ namespace GRMDataManager.Controllers
             data.SaveSale(sale, userId);
         }
 
+
+        [Authorize(Roles = "Admin,Manager")]
         [Route("GetSalesReport")]
         public List<SaleReportModel> GetSalesReport()
         {
@@ -28,6 +31,7 @@ namespace GRMDataManager.Controllers
 
             return data.GetSaleReport();
         }
+
         //public List<ProductModel> Get()
         //{
 

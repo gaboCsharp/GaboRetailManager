@@ -10,7 +10,6 @@ using System.Web.Http;
 namespace GRMDataManager.Controllers
 {
     [Authorize]
-    [RoutePrefix("api/User")]
     public class UserController : ApiController
     {
        
