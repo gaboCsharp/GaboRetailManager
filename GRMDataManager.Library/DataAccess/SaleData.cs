@@ -39,7 +39,6 @@ namespace GRMDataManager.Library.DataAccess
                     detail.Tax = (detail.PurchasePrice * taxRate);
                 }
 
-
                 details.Add(detail);
             }
 
@@ -51,25 +50,33 @@ namespace GRMDataManager.Library.DataAccess
             };
 
             sale.Total = sale.SubTotal + sale.Tax;
-
-            SQLDataAccess sql = new SQLDataAccess();
-            sql.SaveData<SaleDBModel>("dbo.spSale_Insert", sale, "GRMData");
-
-            sale.Id = sql.LoadData<int, dynamic>("dbo.spSale_Lookup", new { sale.CashierId, sale.SaleDate }, "GRMData").FirstOrDefault();
-
-            foreach (var item in details)
+           
+            using (SQLDataAccess sql = new SQLDataAccess())
             {
-                item.SaleId = sale.Id;
-                sql.SaveData("dbo.spSaleDetail_Insert", item, "GRMData");
+                try
+                {
+                    sql.StartTransaction("GRMData");
+
+                    sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
+
+                    sale.Id = sql.LoadDataInTransaction<int, dynamic>("dbo.spSale_Lookup", new { sale.CashierId, sale.SaleDate }).FirstOrDefault();
+
+                    foreach (var item in details)
+                    {
+                        item.SaleId = sale.Id;
+                        sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
+                    }
+
+                    sql.CommitTransaction();
+                }
+                catch
+                {
+                    sql.RollBackTransaction();
+                    throw;
+                }
             }
 
-
-
-
-          
-
-
-
+            
         }
 
         //public List<ProductModel> GetProducts()
