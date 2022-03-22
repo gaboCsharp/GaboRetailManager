@@ -1,5 +1,6 @@
 ﻿using GRMDataManager.Library.Internal.DataAccess;
 using GRMDataManager.Library.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,21 @@ namespace GRMDataManager.Library.DataAccess
 {
     public class SaleData
     {
+        private readonly IConfiguration _config;
+
+        public SaleData()
+        {
+
+        }
+        public SaleData(IConfiguration config)
+        {
+            _config = config;
+        }
 
         public void SaveSale(SaleModel saleInfo, string cashierId)
         {
             List<SaleDetailDBModel> details = new List<SaleDetailDBModel>();
-            ProductData products = new ProductData();
+            ProductData products = new ProductData(_config);
             var taxRate = ConfigHelper.GetTaxRate()/100;
 
             foreach (var item in saleInfo.SaleDetails)
@@ -51,7 +62,7 @@ namespace GRMDataManager.Library.DataAccess
 
             sale.Total = sale.SubTotal + sale.Tax;
            
-            using (SQLDataAccess sql = new SQLDataAccess())
+            using (SQLDataAccess sql = new SQLDataAccess(_config))
             {
                 try
                 {
@@ -79,7 +90,7 @@ namespace GRMDataManager.Library.DataAccess
 
         public List<SaleReportModel> GetSaleReport()
         {
-            SQLDataAccess sql = new SQLDataAccess();
+            SQLDataAccess sql = new SQLDataAccess(_config);
 
             var output = sql.LoadData<SaleReportModel, dynamic>("dbo.spSale_SaleReport", new { }, "GRMData");
 

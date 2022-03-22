@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -18,8 +19,14 @@ namespace GRMApi.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
+        public UserController(IConfiguration config)
+        {
+            _config = config;
+        }
+
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IConfiguration _config;
 
         public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
@@ -33,7 +40,7 @@ namespace GRMApi.Controllers
         {
             string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;//RequestContext.Principal.Identity.GetUserId();
 
-            UserData data = new UserData();
+            UserData data = new UserData(_config);
 
             return data.GetUserById(userId).First();
         }
