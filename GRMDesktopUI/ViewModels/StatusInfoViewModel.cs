@@ -23,7 +23,7 @@ namespace GRMDesktopUI.ViewModels
 
         public void Close()
         {
-            TryClose();
+            TryCloseAsync();
         }
 
     }
