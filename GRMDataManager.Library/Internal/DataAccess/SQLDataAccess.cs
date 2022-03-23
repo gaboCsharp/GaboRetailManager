@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace GRMDataManager.Library.Internal.DataAccess
 {
-    internal class SQLDataAccess : IDisposable
+    public class SQLDataAccess : IDisposable, ISQLDataAccess
     {
 
         public SQLDataAccess(IConfiguration config)
@@ -49,10 +49,10 @@ namespace GRMDataManager.Library.Internal.DataAccess
                    commandType: CommandType.StoredProcedure);
             }
 
-            
+
         }
 
-       
+
 
 
         private IDbConnection _connection;

@@ -9,33 +9,31 @@ using System.Threading.Tasks;
 
 namespace GRMDataManager.Library.DataAccess
 {
-    public class InventoryData
+    public class InventoryData : IInventoryData
     {
         private readonly IConfiguration _config;
+        private readonly ISQLDataAccess _sql;
 
         public InventoryData()
         {
 
         }
-        public InventoryData(IConfiguration _config)
+        public InventoryData(IConfiguration _config, ISQLDataAccess sql)
         {
             this._config = _config;
+            _sql = sql;
         }
 
         public List<InventoryModel> Getinventory()
         {
-            SQLDataAccess sql = new SQLDataAccess(_config);
-
-            var output = sql.LoadData<InventoryModel, dynamic>("dbo.spInventory_GetAll", new { }, "GRMData");
+            var output = _sql.LoadData<InventoryModel, dynamic>("dbo.spInventory_GetAll", new { }, "GRMData");
 
             return output;
         }
 
         public void SaveInventoryRecord(InventoryModel item)
         {
-            SQLDataAccess sql = new SQLDataAccess(_config);
-
-            sql.SaveData("dbo.spInventory_Insert", item, "GRMData");
+            _sql.SaveData("dbo.spInventory_Insert", item, "GRMData");
         }
     }
 }

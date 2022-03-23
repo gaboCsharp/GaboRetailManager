@@ -19,7 +19,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{8744C029-1A0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WPF", "WPF", "{048BED24-41D8-4758-9446-A4AFBF4A53C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GRMApi", "GRMApi\GRMApi.csproj", "{A5803BD1-2DBD-46BE-81BC-A96F50BA8C25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GRMApi", "GRMApi\GRMApi.csproj", "{A5803BD1-2DBD-46BE-81BC-A96F50BA8C25}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{233E7202-BDC7-4164-B9BF-996D555FA8C8}"
+	ProjectSection(SolutionItems) = preProject
+		Roadmap.txt = Roadmap.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,4 +1,6 @@
 using GRMApi.Data;
+using GRMDataManager.Library.DataAccess;
+using GRMDataManager.Library.Internal.DataAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +43,14 @@ namespace GRMApi
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            ///This is Time way
+            //Personal services
+            services.AddTransient<IInventoryData, InventoryData>();
+            services.AddTransient<ISQLDataAccess, SQLDataAccess>();
+            services.AddTransient<IProductData, ProductData>();
+            services.AddTransient<ISaleData, SaleData>();
+            services.AddTransient<IUserData, UserData>();
+
+            ///This is Tim way
             //services.AddAuthentication(options =>
             //{
             //    options.DefaultAuthenticateScheme = "JwtBearer";

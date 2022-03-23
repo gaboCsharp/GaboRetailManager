@@ -9,24 +9,26 @@ using System.Threading.Tasks;
 
 namespace GRMDataManager.Library.DataAccess
 {
-    public class SaleData
+    public class SaleData : ISaleData
     {
-        private readonly IConfiguration _config;
+        private readonly IProductData _productData;
+        private readonly ISQLDataAccess _sql;
 
         public SaleData()
         {
 
         }
-        public SaleData(IConfiguration config)
+        public SaleData(IProductData productData, ISQLDataAccess sql)
         {
-            _config = config;
+            _productData = productData;
+            _sql = sql;
         }
 
         public void SaveSale(SaleModel saleInfo, string cashierId)
         {
             List<SaleDetailDBModel> details = new List<SaleDetailDBModel>();
-            ProductData products = new ProductData(_config);
-            var taxRate = ConfigHelper.GetTaxRate()/100;
+
+            var taxRate = ConfigHelper.GetTaxRate() / 100;
 
             foreach (var item in saleInfo.SaleDetails)
             {
@@ -36,16 +38,16 @@ namespace GRMDataManager.Library.DataAccess
                     Quantity = item.Quantity
                 };
 
-               
-                var productInfo = products.GetProductById(item.ProductId);
-                if(productInfo == null)
+
+                var productInfo = _productData.GetProductById(item.ProductId);
+                if (productInfo == null)
                 {
                     throw new Exception($"The product Id of { item.ProductId } could not be found in the database. ");
                 }
 
                 detail.PurchasePrice = (productInfo.RetailPrice * detail.Quantity);
 
-                if(productInfo.isTaxable)
+                if (productInfo.isTaxable)
                 {
                     detail.Tax = (detail.PurchasePrice * taxRate);
                 }
@@ -61,38 +63,35 @@ namespace GRMDataManager.Library.DataAccess
             };
 
             sale.Total = sale.SubTotal + sale.Tax;
-           
-            using (SQLDataAccess sql = new SQLDataAccess(_config))
+
+
+            try
             {
-                try
+                _sql.StartTransaction("GRMData");
+
+                _sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
+
+                sale.Id = _sql.LoadDataInTransaction<int, dynamic>("dbo.spSale_Lookup", new { sale.CashierId, sale.SaleDate }).FirstOrDefault();
+
+                foreach (var item in details)
                 {
-                    sql.StartTransaction("GRMData");
-
-                    sql.SaveDataInTransaction("dbo.spSale_Insert", sale);
-
-                    sale.Id = sql.LoadDataInTransaction<int, dynamic>("dbo.spSale_Lookup", new { sale.CashierId, sale.SaleDate }).FirstOrDefault();
-
-                    foreach (var item in details)
-                    {
-                        item.SaleId = sale.Id;
-                        sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
-                    }
-
-                    sql.CommitTransaction();
+                    item.SaleId = sale.Id;
+                    _sql.SaveDataInTransaction("dbo.spSaleDetail_Insert", item);
                 }
-                catch
-                {
-                    sql.RollBackTransaction();
-                    throw;
-                }
+
+                _sql.CommitTransaction();
             }
+            catch
+            {
+                _sql.RollBackTransaction();
+                throw;
+            }
+
         }
 
         public List<SaleReportModel> GetSaleReport()
         {
-            SQLDataAccess sql = new SQLDataAccess(_config);
-
-            var output = sql.LoadData<SaleReportModel, dynamic>("dbo.spSale_SaleReport", new { }, "GRMData");
+            var output = _sql.LoadData<SaleReportModel, dynamic>("dbo.spSale_SaleReport", new { }, "GRMData");
 
             return output;
         }
