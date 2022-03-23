@@ -15,21 +15,19 @@ namespace GRMDesktopUI.ViewModels
     {
 
         private IEventAggregator _events;
-        private SalesViewModel _salesVM;
         private ILoggedInUserModel _user;
         private IAPIHelper _apiHelper;
 
-        public ShellViewModel(IEventAggregator events, SalesViewModel salesVM,
+        public ShellViewModel(IEventAggregator events,
              ILoggedInUserModel user, IAPIHelper apiHelper)
         {
-            _events = events;  
-            _salesVM = salesVM;
+            _events = events;             
             _user = user;
             _apiHelper = apiHelper;
 
             _events.SubscribeOnPublishedThread(this);
 
-            ActivateItemAsync(IoC.Get<LoginViewModel>());          
+            ActivateItemAsync(IoC.Get<LoginViewModel>(), new CancellationToken());          
         }
 
 
@@ -55,7 +53,7 @@ namespace GRMDesktopUI.ViewModels
 
         public async Task UserManagement()
         {
-            await ActivateItemAsync(IoC.Get<UserDisplayViewModel>());
+            await ActivateItemAsync(IoC.Get<UserDisplayViewModel>(), new CancellationToken());
         }
 
         public async Task LogOut()
@@ -66,17 +64,10 @@ namespace GRMDesktopUI.ViewModels
             await ActivateItemAsync(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
-
-        //public void Handle(LogOnEvent message)
-        //{
-        //    ActivateItem(_salesVM);
-        //    NotifyOfPropertyChange(() => IsLoggedIn);
-            
-        //}
-
+    
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(_salesVM);
+            await ActivateItemAsync(IoC.Get<SalesViewModel>(), cancellationToken);
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
     }
