@@ -11,6 +11,7 @@ namespace GRMApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "Cashier")]
+    //[Authorize]
     public class ProductController : ControllerBase
     {
         private readonly IConfiguration _config;
@@ -21,6 +22,7 @@ namespace GRMApi.Controllers
         }
 
         // GET api/<controller>
+        [HttpGet]
         public List<ProductModel> Get()
         {
 

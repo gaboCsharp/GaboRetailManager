@@ -56,7 +56,6 @@ namespace GRMDesktopUI.Library.Api
                 {
                     var result = await responde.Content.ReadAsAsync<AuthenticatesUserModel>();
                     return result;
-
                 }
                 else
                 {
@@ -78,7 +77,7 @@ namespace GRMDesktopUI.Library.Api
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer { token }");
 
-            using (HttpResponseMessage responde = await _apiClient.GetAsync("api/User")) 
+            using (HttpResponseMessage responde = await _apiClient.GetAsync("/api/User")) 
             {
                 if (responde.IsSuccessStatusCode)
                 {

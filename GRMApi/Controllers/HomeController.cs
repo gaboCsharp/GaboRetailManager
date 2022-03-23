@@ -38,19 +38,22 @@ namespace GRMApi.Controllers
             //{
             //    var roleExist = await _roleManager.RoleExistsAsync(role);
 
-            //    if(!roleExist)
+            //    if (!roleExist)
             //    {
             //        await _roleManager.CreateAsync(new IdentityRole(role));
             //    }
             //}
 
-            //var user = await _userManager.FindByEmailAsync("phoenix_kernel@hotmail.com");
+            //var user = await _userManager.FindByEmailAsync("gabo@gabo.com");
 
             //if (user != null)
             //{
-            //   await _userManager.AddToRoleAsync(user, "Admin");
-            //   await _userManager.AddToRoleAsync(user, "Cashier");
+            //    await _userManager.AddToRoleAsync(user, "Admin");
+            //    await _userManager.AddToRoleAsync(user, "Cashier");
+            //    await _userManager.AddToRoleAsync(user, "Manager");
             //}
+
+       
 
             return View();
         }
